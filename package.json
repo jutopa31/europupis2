@@ -9,14 +9,13 @@
   },
   "dependencies": {
     "@supabase/supabase-js": "^2.58.0",
-    "next": "latest",
-    "react": "latest",
-    "react-dom": "latest"
-  },
-  "devDependencies": {
     "@tailwindcss/postcss": "^4.1.13",
     "autoprefixer": "^10.4.21",
+    "next": "latest",
     "postcss": "^8.5.6",
+    "react": "latest",
+    "react-dom": "latest",
     "tailwindcss": "^4.1.13"
-  }
+  },
+  "devDependencies": {}
 }

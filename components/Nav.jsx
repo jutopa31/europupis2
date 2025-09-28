@@ -1,6 +1,7 @@
 ﻿'use client';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
+import AuthButton from './AuthButton';
 
 export default function Nav() {
   const pathname = usePathname();
@@ -23,17 +24,20 @@ export default function Nav() {
         <span>Europupis</span>
       </Link>
 
-      <div className="flex items-center gap-2">
-        {navItems.map((item) => (
-          <Link
-            key={item.href}
-            href={item.href}
-            className={`nav-link group ${isActive(item.href) ? 'nav-link-active' : ''}`}
-          >
-            <span className="mr-2 group-hover:animate-bounce-gentle">{item.icon}</span>
-            <span className="hidden sm:inline">{item.label}</span>
-          </Link>
-        ))}
+      <div className="flex items-center gap-4">
+        <div className="flex items-center gap-2">
+          {navItems.map((item) => (
+            <Link
+              key={item.href}
+              href={item.href}
+              className={`nav-link group ${isActive(item.href) ? 'nav-link-active' : ''}`}
+            >
+              <span className="mr-2 group-hover:animate-bounce-gentle">{item.icon}</span>
+              <span className="hidden sm:inline">{item.label}</span>
+            </Link>
+          ))}
+        </div>
+        <AuthButton />
       </div>
     </nav>
   );
