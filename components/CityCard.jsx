@@ -285,11 +285,110 @@ export default function CityCard({ city, onAddNote, onUpdateCity }) {
         )}
       </div>
 
+      {/* Sección de alojamiento */}
+      <div className="mb-6">
+        <div className="flex items-center justify-between mb-3">
+          <div className="flex items-center gap-2">
+            <div className="w-8 h-8 rounded-lg bg-purple-100 dark:bg-purple-900/30 flex items-center justify-center">
+              🏨
+            </div>
+            <h4 className="font-semibold text-zinc-900 dark:text-zinc-100">Alojamiento</h4>
+          </div>
+          <button
+            onClick={() => setShowAddAccommodation(!showAddAccommodation)}
+            className="text-xs font-medium text-brand-600 dark:text-brand-400 hover:text-brand-700 dark:hover:text-brand-300 transition-colors"
+          >
+            {showAddAccommodation ? 'Cancelar' : '+ Añadir'}
+          </button>
+        </div>
+
+        {city.accommodations && city.accommodations.length > 0 ? (
+          <div className="space-y-3 mb-4">
+            {city.accommodations.map((accommodation) => (
+              <div key={accommodation.id} className="p-4 rounded-lg bg-purple-50 dark:bg-purple-900/20 border border-purple-200 dark:border-purple-800/30 group hover:bg-purple-100 dark:hover:bg-purple-900/30 transition-colors">
+                <div className="flex items-start justify-between mb-2">
+                  <div className="flex-1">
+                    <div className="flex items-center gap-2 mb-1">
+                      <h5 className="font-semibold text-zinc-900 dark:text-zinc-100 text-sm">
+                        {accommodation.name}
+                      </h5>
+                      {accommodation.price && (
+                        <span className="text-xs bg-green-100 dark:bg-green-900/30 text-green-700 dark:text-green-300 px-2 py-1 rounded-full font-medium">
+                          €{accommodation.price}/noche
+                        </span>
+                      )}
+                    </div>
+                    {accommodation.address && (
+                      <p className="text-xs text-zinc-600 dark:text-zinc-400 mb-2">
+                        📍 {accommodation.address}
+                      </p>
+                    )}
+                    {(accommodation.checkInDate || accommodation.checkOutDate) && (
+                      <p className="text-xs text-zinc-600 dark:text-zinc-400 mb-2">
+                        🗓️ {accommodation.checkInDate && new Date(accommodation.checkInDate).toLocaleDateString('es-ES')}
+                        {accommodation.checkInDate && accommodation.checkOutDate && ' - '}
+                        {accommodation.checkOutDate && new Date(accommodation.checkOutDate).toLocaleDateString('es-ES')}
+                      </p>
+                    )}
+                    {accommodation.notes && (
+                      <p className="text-xs text-zinc-700 dark:text-zinc-300 italic">
+                        💡 {accommodation.notes}
+                      </p>
+                    )}
+                  </div>
+                  <div className="flex items-center gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
+                    <button
+                      onClick={() => setEditingAccommodation(accommodation)}
+                      className="text-xs text-blue-600 dark:text-blue-400 hover:text-blue-700 dark:hover:text-blue-300 transition-colors"
+                    >
+                      ✏️
+                    </button>
+                  </div>
+                </div>
+                {accommodation.bookingUrl && (
+                  <a
+                    href={accommodation.bookingUrl}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="inline-flex items-center gap-1 text-xs text-brand-600 dark:text-brand-400 hover:text-brand-700 dark:hover:text-brand-300 transition-colors"
+                  >
+                    🔗 Ver reserva
+                  </a>
+                )}
+              </div>
+            ))}
+          </div>
+        ) : (
+          <p className="text-sm muted italic p-3 rounded-lg bg-zinc-50 dark:bg-zinc-800/50 mb-4">
+            Sin información de alojamiento
+          </p>
+        )}
+
+        {/* Formulario para agregar alojamiento */}
+        {showAddAccommodation && (
+          <AccommodationForm
+            onSave={handleAddAccommodation}
+            onCancel={() => setShowAddAccommodation(false)}
+          />
+        )}
+
+        {/* Formulario para editar alojamiento */}
+        {editingAccommodation && (
+          <AccommodationForm
+            accommodation={editingAccommodation}
+            onSave={handleUpdateAccommodation}
+            onDelete={handleDeleteAccommodation}
+            onCancel={() => setEditingAccommodation(null)}
+          />
+        )}
+      </div>
+
       {/* Pie de tarjeta */}
       <div className="mt-4 pt-4 border-t border-zinc-200 dark:border-zinc-800">
         <div className="flex items-center justify-between text-xs muted">
           <span>{city.transfers?.length || 0} traslados</span>
           <span>{city.notes?.length || 0} notas</span>
+          <span>{city.accommodations?.length || 0} alojamientos</span>
         </div>
       </div>
     </div>

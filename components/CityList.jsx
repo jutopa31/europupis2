@@ -11,20 +11,30 @@ export default function CityList() {
   const [cities, setCities] = useLocalStorage('europupis-cities', initial);
 
   useEffect(() => {
-    let mounted = true;
-    (async () => {
-      const data = await listCities();
-      if (mounted && Array.isArray(data) && data.length) {
-        setCities(data);
-      }
-    })();
-    return () => { mounted = false; };
+    loadCities();
   }, []);
 
+  async function loadCities() {
+    const data = await listCities();
+    if (Array.isArray(data) && data.length) {
+      setCities(data);
+    }
+  }
+
   async function addNote(cityId, note) {
-    setCities(cities.map(c => c.id === cityId ? { ...c, notes: [note, ...(c.notes || [])] } : c));
+    setCities(cities.map(c => c.id === cityId ? {
+      ...c,
+      notes: [
+        { id: `temp-${Date.now()}`, body: note },
+        ...(c.notes || [])
+      ]
+    } : c));
     // Fire-and-forget to Supabase; UI ya actualizada
     try { await createCityNote(cityId, note); } catch {}
+  }
+
+  function handleUpdateCity() {
+    loadCities();
   }
 
   return (
@@ -32,7 +42,7 @@ export default function CityList() {
       <ItinerarySummary cities={cities} />
       <div className="grid gap-4 sm:grid-cols-2">
         {cities.map(c => (
-          <CityCard key={c.id} city={c} onAddNote={addNote} />
+          <CityCard key={c.id} city={c} onAddNote={addNote} onUpdateCity={handleUpdateCity} />
         ))}
       </div>
     </div>
