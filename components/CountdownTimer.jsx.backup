@@ -1,0 +1,47 @@
+'use client';
+import { useEffect, useState } from 'react';
+
+function computeTimeLeft(target) {
+  const now = new Date();
+  const diff = Math.max(0, target - now);
+  const seconds = Math.floor((diff / 1000) % 60);
+  const minutes = Math.floor((diff / (1000 * 60)) % 60);
+  const hours = Math.floor((diff / (1000 * 60 * 60)) % 24);
+  const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+  return { days, hours, minutes, seconds, done: diff === 0 };
+}
+
+function Tile({ label, value }) {
+  return (
+    <div className="flex flex-col items-center">
+      <div className="min-w-[64px] rounded-md bg-zinc-100 dark:bg-zinc-800 px-3 py-2 text-center text-2xl font-semibold">
+        {String(value).padStart(2, '0')}
+      </div>
+      <div className="mt-1 text-xs uppercase tracking-wide muted">{label}</div>
+    </div>
+  );
+}
+
+export default function CountdownTimer({ targetDate, prefixText = 'Europupis starts in…' }) {
+  const target = new Date(targetDate);
+  const [timeLeft, setTimeLeft] = useState(() => computeTimeLeft(target));
+
+  useEffect(() => {
+    const id = setInterval(() => setTimeLeft(computeTimeLeft(target)), 1000);
+    return () => clearInterval(id);
+  }, [targetDate]);
+
+  if (timeLeft.done) return <p className="text-xl">Bon voyage! 🎉</p>;
+
+  return (
+    <div aria-live="polite">
+      <div className="text-sm muted">{prefixText}</div>
+      <div className="mt-2 flex items-center gap-3">
+        <Tile label="Days" value={timeLeft.days} />
+        <Tile label="Hours" value={timeLeft.hours} />
+        <Tile label="Minutes" value={timeLeft.minutes} />
+        <Tile label="Seconds" value={timeLeft.seconds} />
+      </div>
+    </div>
+  );
+}
