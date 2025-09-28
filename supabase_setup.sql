@@ -77,6 +77,26 @@ create policy city_transfers_insert_own on public.city_transfers for insert with
 create policy city_transfers_update_own on public.city_transfers for update using (auth.uid() = user_id);
 create policy city_transfers_delete_own on public.city_transfers for delete using (auth.uid() = user_id);
 
+-- CITY ACCOMMODATIONS
+create table if not exists public.city_accommodations (
+  id uuid primary key default gen_random_uuid(),
+  user_id uuid not null,
+  city_id uuid not null references public.cities(id) on delete cascade,
+  name text not null,
+  address text,
+  check_in_date date,
+  check_out_date date,
+  price numeric(10,2),
+  booking_url text,
+  notes text,
+  created_at timestamptz not null default now()
+);
+alter table public.city_accommodations enable row level security;
+create policy city_accommodations_select_own on public.city_accommodations for select using (auth.uid() = user_id);
+create policy city_accommodations_insert_own on public.city_accommodations for insert with check (auth.uid() = user_id);
+create policy city_accommodations_update_own on public.city_accommodations for update using (auth.uid() = user_id);
+create policy city_accommodations_delete_own on public.city_accommodations for delete using (auth.uid() = user_id);
+
 -- Add additional fields for itinerary
 alter table public.cities add column if not exists arrival_datetime timestamptz;
 alter table public.cities add column if not exists origin text;
@@ -87,3 +107,4 @@ create index if not exists idx_expenses_user_date on public.expenses(user_id, da
 create index if not exists idx_cities_user on public.cities(user_id);
 create index if not exists idx_city_notes_city on public.city_notes(city_id);
 create index if not exists idx_city_transfers_city on public.city_transfers(city_id);
+create index if not exists idx_city_accommodations_city on public.city_accommodations(city_id);

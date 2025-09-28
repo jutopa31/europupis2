@@ -11,7 +11,8 @@ export default function Nav() {
     { href: '/', label: 'Inicio', icon: '🏠' },
     { href: '/tasks', label: 'Tareas', icon: '📝' },
     { href: '/expenses', label: 'Gastos', icon: '💸' },
-    { href: '/cities', label: 'Ciudades', icon: '🏙️' }
+    { href: '/cities', label: 'Ciudades', icon: '🏙️' },
+    { href: '/pantu-investiga', label: 'Pantu Investiga', icon: '🔎' }
   ];
 
   return (

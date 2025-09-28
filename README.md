@@ -20,6 +20,7 @@ Aplicación Next.js mínima para planificar un viaje por Europa. La interfaz est
 - `/tasks` — Notas adhesivas (mock + localStorage)
 - `/expenses` — Registro de gastos (mock + localStorage)
 - `/cities` — Ciudades y traslados (Supabase + localStorage fallback)
+- `/pantu-investiga` — Notas de investigación por ciudad (usa los datos de Ciudades)
 
 Configura la fecha objetivo en `lib/tripConfig.js`.
 
@@ -27,7 +28,7 @@ Consulta `ARCHITECTURE.md` para la estructura y plan de integración con Supabas
 
 ## UI y estilos (Tailwind)
 
-- Tailwind v4 + PostCSS + Autoprefixer configurados (`postcss.config.js` usa el plugin `tailwindcss`).
+- Tailwind v4 + PostCSS + Autoprefixer configurados (`postcss.config.js` usa el plugin `@tailwindcss/postcss`).
 - Componentes UI en `components/ui/`.
 - Estilos globales en `app/globals.css` (tokens de tema + utilidades).
 

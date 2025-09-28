@@ -1,6 +1,17 @@
 import { useState } from 'react';
 import Input from './ui/Input';
 import Button from './ui/Button';
+import TransferForm from './TransferForm';
+import AccommodationForm from './AccommodationForm';
+import {
+  createCityTransfer,
+  updateCityTransfer,
+  deleteCityTransfer,
+  createCityAccommodation,
+  updateCityAccommodation,
+  deleteCityAccommodation,
+  deleteCityNote
+} from '../lib/services/citiesService';
 
 const cityEmojis = {
   Paris: '🗼',
@@ -22,9 +33,13 @@ function formatDateTimeEs(value) {
   }
 }
 
-export default function CityCard({ city, onAddNote }) {
+export default function CityCard({ city, onAddNote, onUpdateCity }) {
   const [showAddNote, setShowAddNote] = useState(false);
   const [noteValue, setNoteValue] = useState('');
+  const [showAddTransfer, setShowAddTransfer] = useState(false);
+  const [showAddAccommodation, setShowAddAccommodation] = useState(false);
+  const [editingTransfer, setEditingTransfer] = useState(null);
+  const [editingAccommodation, setEditingAccommodation] = useState(null);
 
   function handleSubmit(e) {
     e.preventDefault();
@@ -35,6 +50,81 @@ export default function CityCard({ city, onAddNote }) {
     form.reset();
     setNoteValue('');
     setShowAddNote(false);
+  }
+
+  // === TRANSFER HANDLERS ===
+  async function handleAddTransfer(info) {
+    try {
+      await createCityTransfer(city.id, info);
+      onUpdateCity?.();
+      setShowAddTransfer(false);
+    } catch (error) {
+      alert('Error al agregar transporte');
+    }
+  }
+
+  async function handleUpdateTransfer(info) {
+    if (!editingTransfer?.id) return;
+    try {
+      await updateCityTransfer(editingTransfer.id, info);
+      onUpdateCity?.();
+      setEditingTransfer(null);
+    } catch (error) {
+      alert('Error al actualizar transporte');
+    }
+  }
+
+  async function handleDeleteTransfer(transferId) {
+    try {
+      await deleteCityTransfer(transferId);
+      onUpdateCity?.();
+      setEditingTransfer(null);
+    } catch (error) {
+      alert('Error al eliminar transporte');
+    }
+  }
+
+  // === ACCOMMODATION HANDLERS ===
+  async function handleAddAccommodation(accommodationData) {
+    try {
+      await createCityAccommodation(city.id, accommodationData);
+      onUpdateCity?.();
+      setShowAddAccommodation(false);
+    } catch (error) {
+      alert('Error al agregar alojamiento');
+    }
+  }
+
+  async function handleUpdateAccommodation(accommodationData) {
+    if (!editingAccommodation?.id) return;
+    try {
+      await updateCityAccommodation(editingAccommodation.id, accommodationData);
+      onUpdateCity?.();
+      setEditingAccommodation(null);
+    } catch (error) {
+      alert('Error al actualizar alojamiento');
+    }
+  }
+
+  async function handleDeleteAccommodation(accommodationId) {
+    try {
+      await deleteCityAccommodation(accommodationId);
+      onUpdateCity?.();
+      setEditingAccommodation(null);
+    } catch (error) {
+      alert('Error al eliminar alojamiento');
+    }
+  }
+
+  // === NOTE HANDLERS ===
+  async function handleDeleteNote(noteId) {
+    if (!confirm('¿Eliminar esta nota?')) return;
+    try {
+      await deleteCityNote(noteId);
+      onUpdateCity?.();
+    } catch (error) {
+      alert('Error al eliminar nota');
+    }
   }
 
   const cityEmoji = cityEmojis[city.name] || '🌍';
@@ -56,25 +146,66 @@ export default function CityCard({ city, onAddNote }) {
 
       {/* Sección de traslados */}
       <div className="mb-6">
-        <div className="flex items-center gap-2 mb-3">
-          <div className="w-8 h-8 rounded-lg bg-blue-100 dark:bg-blue-900/30 flex items-center justify-center">
-            🚆
+        <div className="flex items-center justify-between mb-3">
+          <div className="flex items-center gap-2">
+            <div className="w-8 h-8 rounded-lg bg-blue-100 dark:bg-blue-900/30 flex items-center justify-center">
+              🚆
+            </div>
+            <h4 className="font-semibold text-zinc-900 dark:text-zinc-100">Transporte</h4>
           </div>
-          <h4 className="font-semibold text-zinc-900 dark:text-zinc-100">Transporte</h4>
+          <button
+            onClick={() => setShowAddTransfer(!showAddTransfer)}
+            className="text-xs font-medium text-brand-600 dark:text-brand-400 hover:text-brand-700 dark:hover:text-brand-300 transition-colors"
+          >
+            {showAddTransfer ? 'Cancelar' : '+ Añadir'}
+          </button>
         </div>
+
         {city.transfers && city.transfers.length > 0 ? (
-          <div className="space-y-2">
-            {city.transfers.map((transfer, i) => (
-              <div key={i} className="flex items-start gap-2 p-3 rounded-lg bg-zinc-50 dark:bg-zinc-800/50 text-sm">
-                <div className="w-1.5 h-1.5 rounded-full bg-brand-500 mt-2 flex-shrink-0"></div>
-                <span className="leading-relaxed">{transfer}</span>
-              </div>
-            ))}
+          <div className="space-y-2 mb-4">
+            {city.transfers.map((transfer, i) => {
+              const transferData = typeof transfer === 'string' ? { info: transfer } : transfer;
+              const transferText = transferData?.info || '';
+              const transferId = transferData?.id;
+
+              return (
+                <div key={transferId || i} className="flex items-start gap-2 p-3 rounded-lg bg-zinc-50 dark:bg-zinc-800/50 text-sm group hover:bg-zinc-100 dark:hover:bg-zinc-800 transition-colors">
+                  <div className="w-1.5 h-1.5 rounded-full bg-brand-500 mt-2 flex-shrink-0"></div>
+                  <span className="leading-relaxed flex-1">{transferText}</span>
+                  {transferId && (
+                    <button
+                      onClick={() => setEditingTransfer(transferData)}
+                      className="opacity-0 group-hover:opacity-100 text-xs text-blue-600 dark:text-blue-400 hover:text-blue-700 dark:hover:text-blue-300 transition-all"
+                    >
+                      ✏️
+                    </button>
+                  )}
+                </div>
+              );
+            })}
           </div>
         ) : (
-          <p className="text-sm muted italic p-3 rounded-lg bg-zinc-50 dark:bg-zinc-800/50">
+          <p className="text-sm muted italic p-3 rounded-lg bg-zinc-50 dark:bg-zinc-800/50 mb-4">
             Sin información de transporte
           </p>
+        )}
+
+        {/* Formulario para agregar transporte */}
+        {showAddTransfer && (
+          <TransferForm
+            onSave={handleAddTransfer}
+            onCancel={() => setShowAddTransfer(false)}
+          />
+        )}
+
+        {/* Formulario para editar transporte */}
+        {editingTransfer && (
+          <TransferForm
+            transfer={editingTransfer}
+            onSave={handleUpdateTransfer}
+            onDelete={handleDeleteTransfer}
+            onCancel={() => setEditingTransfer(null)}
+          />
         )}
       </div>
 
@@ -97,12 +228,26 @@ export default function CityCard({ city, onAddNote }) {
 
         {city.notes && city.notes.length > 0 ? (
           <div className="space-y-2 mb-4">
-            {city.notes.map((note, i) => (
-              <div key={i} className="flex items-start gap-2 p-3 rounded-lg bg-yellow-50 dark:bg-yellow-900/20 text-sm border border-yellow-200 dark:border-yellow-800/30">
-                <div className="w-1.5 h-1.5 rounded-full bg-yellow-500 mt-2 flex-shrink-0"></div>
-                <span className="leading-relaxed">{note}</span>
-              </div>
-            ))}
+            {city.notes.map((note, i) => {
+              const noteData = typeof note === 'string' ? { body: note } : note;
+              const noteText = noteData?.body || '';
+              const noteId = noteData?.id;
+
+              return (
+                <div key={noteId || i} className="flex items-start gap-2 p-3 rounded-lg bg-yellow-50 dark:bg-yellow-900/20 text-sm border border-yellow-200 dark:border-yellow-800/30 group hover:bg-yellow-100 dark:hover:bg-yellow-900/30 transition-colors">
+                  <div className="w-1.5 h-1.5 rounded-full bg-yellow-500 mt-2 flex-shrink-0"></div>
+                  <span className="leading-relaxed flex-1">{noteText}</span>
+                  {noteId && (
+                    <button
+                      onClick={() => handleDeleteNote(noteId)}
+                      className="opacity-0 group-hover:opacity-100 text-xs text-red-600 dark:text-red-400 hover:text-red-700 dark:hover:text-red-300 transition-all"
+                    >
+                      🗑️
+                    </button>
+                  )}
+                </div>
+              );
+            })}
           </div>
         ) : (
           <p className="text-sm muted italic p-3 rounded-lg bg-zinc-50 dark:bg-zinc-800/50 mb-4">
@@ -150,4 +295,3 @@ export default function CityCard({ city, onAddNote }) {
     </div>
   );
 }
-

@@ -16,13 +16,17 @@ function formatDateTimeEs(value) {
 
 export default function ItinerarySummary({ cities = [] }) {
   const items = useMemo(() => {
-    const withArrival = cities.map((c) => ({
-      id: c.id,
-      name: c.name,
-      arrival: c.arrivalDateTime || c.arrival || null,
-      from: c.from || null,
-      firstLeg: c.transfers?.[0] || null,
-    }));
+    const withArrival = cities.map((c) => {
+      const firstLegRaw = c.transfers?.[0] ?? null;
+      const firstLeg = typeof firstLegRaw === 'string' ? firstLegRaw : (firstLegRaw && firstLegRaw.info) || null;
+      return ({
+        id: c.id,
+        name: c.name,
+        arrival: c.arrivalDateTime || c.arrival || null,
+        from: c.from || null,
+        firstLeg,
+      });
+    });
     return withArrival
       .sort((a, b) => {
         const da = a.arrival ? new Date(a.arrival).getTime() : Infinity;
@@ -64,4 +68,3 @@ export default function ItinerarySummary({ cities = [] }) {
     </section>
   );
 }
-
