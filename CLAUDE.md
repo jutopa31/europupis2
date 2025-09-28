@@ -18,18 +18,24 @@ npm run build
 npm start
 ```
 
+## Repository
+
+- **GitHub**: https://github.com/jutopa31/europupis2
+- **Deploy**: Import GitHub repo to Vercel (Next.js auto-detected)
+
 ## Architecture
 
 - **Framework**: Next.js 15+ (App Router), JavaScript (no TypeScript)
 - **Styling**: Tailwind v4 via `@import "tailwindcss"` in globals.css + PostCSS + Autoprefixer
 - **State Management**: React hooks (useState, useEffect) + custom useLocalStorage hook
-- **Data Layer**: Mock services (`lib/services/`) with localStorage persistence; designed for future Supabase swap
+- **Data Layer**: Hybrid services (`lib/services/`) - Supabase when configured + env vars present, falls back to mock + localStorage
 - **Routing**: App Router with pages: `/` (countdown), `/tasks`, `/expenses`, `/cities`
 
 ## Key Config
 
-- Trip date in `lib/tripConfig.js`
-- Tailwind plugin configured in `postcss.config.js` (`tailwindcss`)
+- **Trip date**: `lib/tripConfig.js` (Oct 1, 2025 at 15:00)
+- **Tailwind**: Plugin configured in `postcss.config.js` (`tailwindcss`)
+- **Supabase**: Optional env vars in `.env.local` (copy from `.env.local.example`)
 
 ## Structure
 
@@ -53,8 +59,9 @@ lib/
 
 - **Spanish UI**: Preserve Spanish UI copy and tone in all frontend text
 - **Tailwind v4**: Avoid `@apply` with custom classes; use plain CSS when needed
-- **Service Layer**: All data operations go through `lib/services/` for easy Supabase migration
+- **Service Layer**: All data operations go through `lib/services/` - hybrid approach with Supabase + fallback
 - **Mock Data**: Lives in `lib/mocks/` and persists via localStorage using `useLocalStorage` hook
+- **Supabase Integration**: Cities service already integrated; auto-detects env vars and user auth
 - **Theme**: Custom CSS variables in globals.css for brand colors and dark mode support
 - **Keep minimal**: Prefer editing existing files over creating new ones
 

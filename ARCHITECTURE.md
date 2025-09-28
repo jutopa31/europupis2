@@ -241,30 +241,56 @@ export default function useLocalStorage(key, initialValue) {
 - No additional libraries required for phase 1 (mock-only)
 - Phase 2: `@supabase/supabase-js` for real-time data sync (optional)
 
-## Supabase Integration Plan (Phase 2 Only)
+## Supabase Integration Status
 
-- Add dependency: `@supabase/supabase-js`
-- Env vars in Vercel/`.env.local`:
-  - `NEXT_PUBLIC_SUPABASE_URL`
-  - `NEXT_PUBLIC_SUPABASE_ANON_KEY`
-- Initialize client in `lib/supabaseClient.js` and use in `lib/services/*Service.js`.
-- Replace mock `list/add/update/remove` with Supabase queries.
-- Tables: `tasks`, `expenses`, `cities`, `city_notes` (and optionally `city_transfers`).
-- Enable RLS; policies to allow authenticated users (or use protected links).
+**✅ PARTIALLY IMPLEMENTED** (as of Session 2025-09-28)
+
+### What's Done:
+- ✅ `@supabase/supabase-js` dependency added
+- ✅ `lib/supabaseClient.js` initialized and ready
+- ✅ **Cities service** fully integrated with hybrid approach:
+  - Auto-detects Supabase env vars (`NEXT_PUBLIC_SUPABASE_URL`, `NEXT_PUBLIC_SUPABASE_ANON_KEY`)
+  - Falls back to mock data if Supabase not configured or user not authenticated
+  - Supports cities, city_notes, and city_transfers tables
+- ✅ `.env.local.example` provided with sample configuration
+
+### What's Pending:
+- ⏳ Tasks service (still mock-only)
+- ⏳ Expenses service (still mock-only)
+- ⏳ Database schema deployment (`db/supabase.schema.sql`)
+- ⏳ RLS policies setup
 
 Schema: see `db/supabase.schema.sql` (includes tables, RLS, indexes).
 
 Env template: `/.env.local.example` — copy to `.env.local` and fill.
 
-Service swap example (pseudo):
+### Hybrid Service Example (Cities - IMPLEMENTED):
 ```js
-// lib/services/tasksService.js (Phase 2)
-// import { supabase } from '../supabaseClient';
-// export async function listTasks() {
-//   const { data, error } = await supabase.from('tasks').select('*').order('created_at', { ascending: false });
-//   if (error) throw error;
-//   return data;
-// }
+// lib/services/citiesService.js
+import { supabase } from '../supabaseClient';
+
+function envReady() {
+  return Boolean(process.env.NEXT_PUBLIC_SUPABASE_URL && process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY);
+}
+
+export async function listCities() {
+  try {
+    if (!envReady()) return citiesMock;
+
+    const { data: { user } = {} } = await supabase.auth.getUser();
+    if (!user) return citiesMock;
+
+    const { data, error } = await supabase
+      .from('cities')
+      .select(`id, name, origin, arrival_datetime, city_notes(body), city_transfers(info)`)
+      .order('arrival_datetime', { ascending: true, nullsFirst: false });
+
+    if (error) throw error;
+    return data || citiesMock;
+  } catch {
+    return citiesMock; // Graceful fallback
+  }
+}
 ```
 
 ## Configuration

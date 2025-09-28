@@ -2,14 +2,24 @@
 
 Aplicación Next.js mínima para planificar un viaje por Europa. La interfaz está en español (solo visualización en frontend).
 
-- Desarrollo: `npm install` y `npm run dev`
-- Deploy: importar el repo en Vercel (Next.js auto-detectado)
+## 🚀 Quick Start
 
-Páginas:
-- `/` — Cuenta regresiva al viaje
-- `/tasks` — Notas adhesivas (mock, persiste en localStorage)
-- `/expenses` — Registro de gastos (mock, localStorage)
-- `/cities` — Ciudades y traslados (mock, localStorage)
+- **Desarrollo**: `npm install` y `npm run dev`
+- **Deploy**: importar el repo en Vercel (Next.js auto-detectado)
+- **GitHub**: https://github.com/jutopa31/europupis2
+
+## 🛠️ Setup con Supabase (Opcional)
+
+1. Copia `.env.local.example` a `.env.local`
+2. Llena las variables con tu proyecto Supabase
+3. Las ciudades se sincronizarán automáticamente cuando esté configurado
+
+## 📱 Funcionalidades
+
+- `/` — Cuenta regresiva al viaje (1 Oct 2025, 15:00h)
+- `/tasks` — Notas adhesivas (mock + localStorage)
+- `/expenses` — Registro de gastos (mock + localStorage)
+- `/cities` — Ciudades y traslados (Supabase + localStorage fallback)
 
 Configura la fecha objetivo en `lib/tripConfig.js`.
 
