@@ -4,7 +4,7 @@ import useLocalStorage from '../lib/hooks/useLocalStorage';
 import { citiesMock } from '../lib/mocks/citiesMock';
 import CityCard from './CityCard';
 import Input from './ui/Input';
-import { listCities, createCityNote, createCity } from '../lib/services/citiesService';
+import { listCities, createCityNote, createCity, deleteCity } from '../lib/services/citiesService';
 import ItinerarySummary from './ItinerarySummary';
 
 export default function CityList() {
@@ -67,6 +67,15 @@ export default function CityList() {
     loadCities();
   }
 
+  async function handleDeleteCity(id) {
+    setCities(cities.filter(c => c.id !== id));
+    try {
+      await deleteCity(id);
+    } catch {
+      loadCities();
+    }
+  }
+
   return (
     <div className="space-y-6">
       {/* Añadir ciudad */}
@@ -88,7 +97,7 @@ export default function CityList() {
       <ItinerarySummary cities={cities} />
       <div className="grid gap-4 sm:grid-cols-2">
         {cities.map(c => (
-          <CityCard key={c.id} city={c} onAddNote={addNote} onUpdateCity={handleUpdateCity} />
+          <CityCard key={c.id} city={c} onAddNote={addNote} onUpdateCity={handleUpdateCity} onDeleteCity={handleDeleteCity} />
         ))}
       </div>
     </div>

@@ -33,7 +33,7 @@ function formatDateTimeEs(value) {
   }
 }
 
-export default function CityCard({ city, onAddNote, onUpdateCity }) {
+export default function CityCard({ city, onAddNote, onUpdateCity, onDeleteCity }) {
   const [showAddNote, setShowAddNote] = useState(false);
   const [noteValue, setNoteValue] = useState('');
   const [showAddTransfer, setShowAddTransfer] = useState(false);
@@ -386,9 +386,18 @@ export default function CityCard({ city, onAddNote, onUpdateCity }) {
       {/* Pie de tarjeta */}
       <div className="mt-4 pt-4 border-t border-zinc-200 dark:border-zinc-800">
         <div className="flex items-center justify-between text-xs muted">
-          <span>{city.transfers?.length || 0} traslados</span>
-          <span>{city.notes?.length || 0} notas</span>
-          <span>{city.accommodations?.length || 0} alojamientos</span>
+          <div className="flex items-center gap-4">
+            <span>{city.transfers?.length || 0} traslados</span>
+            <span>{city.notes?.length || 0} notas</span>
+            <span>{city.accommodations?.length || 0} alojamientos</span>
+          </div>
+          <button
+            onClick={() => onDeleteCity?.(city.id)}
+            className="text-xs font-medium text-red-600 dark:text-red-400 hover:text-red-700 dark:hover:text-red-300 transition-colors"
+            aria-label="Eliminar ciudad"
+          >
+            Eliminar
+          </button>
         </div>
       </div>
     </div>
