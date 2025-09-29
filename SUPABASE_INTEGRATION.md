@@ -3,6 +3,7 @@
 ## Resumen
 - Conectamos la app a tu proyecto Supabase para la sección de Ciudades.
 - Añadimos cliente, variables de entorno y servicios con fallback a mocks si no hay sesión o falla la red.
+- Nueva tabla `research_notes` para notas libres usadas en “Pantu Investiga”.
 
 ## Requisitos
 - Node.js instalado.
@@ -19,7 +20,7 @@
 - Ejecuta: `npm run dev` (http://localhost:3000)
 
 ## Esquema y RLS
-- Base: `db/supabase.schema.sql` (tasks, expenses, cities, city_notes, city_transfers con RLS por `auth.uid()`).
+- Base: `db/supabase.schema.sql` (tasks, expenses, cities, city_notes, city_transfers, research_notes con RLS por `auth.uid()`).
 - Campos para itinerario (añadir si no existen):
   - `alter table public.cities add column if not exists arrival_datetime timestamptz;`
   - `alter table public.cities add column if not exists origin text;`
@@ -30,8 +31,14 @@
 - Ciudades: `lib/services/citiesService.js`
   - `listCities()` lee `cities` (+ notas y traslados) y mapea a `{ id, name, from, arrivalDateTime, transfers[], notes[] }`.
   - `createCityNote(cityId, body)` inserta en `city_notes` (requiere sesión).
-  - Fallback a mocks si faltan env vars, no hay sesión o hay error.
+  - Importante: ya no se usan ciudades mock como fallback; si no hay sesión o falla la red, devuelve `[]`.
 - UI: `components/CityList.jsx` consume `listCities()` y usa `createCityNote()`.
+  - El almacenamiento local migra a la clave `europupis-cities-v2` para evitar semillas mock antiguas.
+  - Si ves datos antiguos, borra el `localStorage` de la app.
+
+- Notas de investigación: `lib/services/researchService.js`
+  - `listResearchNotes()`, `createResearchNote(body)`, `deleteResearchNote(id)`.
+  - UI en `components/ResearchBoard.jsx` (ruta `/pantu-investiga`). Muestra una nota adhesiva con el conteo de ciudades y permite crear notas de texto libre.
 
 ## Autenticación
 - Activa Email Magic Link o GitHub en Supabase → Auth.
@@ -47,6 +54,10 @@ insert into public.city_transfers (user_id, city_id, info)
 values (auth.uid(), '<city_id>', 'CDG → RER B → Gare du Nord');
 insert into public.city_notes (user_id, city_id, body)
 values (auth.uid(), '<city_id>', 'Reservar franja del Louvre');
+
+-- Notas libres de investigación
+insert into public.research_notes (user_id, body)
+values (auth.uid(), 'Ideas sueltas y pendientes de investigar');
 ```
 
 ## Verificación
@@ -57,4 +68,3 @@ values (auth.uid(), '<city_id>', 'Reservar franja del Louvre');
 ## Próximos pasos
 - Migrar `tasks` y `expenses` a Supabase con el mismo patrón.
 - Añadir login UI sencillo (email/GitHub) si lo deseas.
-

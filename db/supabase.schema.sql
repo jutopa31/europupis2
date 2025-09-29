@@ -84,3 +84,16 @@ create index if not exists idx_cities_user on public.cities(user_id);
 create index if not exists idx_city_notes_city on public.city_notes(city_id);
 create index if not exists idx_city_transfers_city on public.city_transfers(city_id);
 
+-- RESEARCH NOTES (global, texto libre por usuario)
+create table if not exists public.research_notes (
+  id uuid primary key default gen_random_uuid(),
+  user_id uuid not null,
+  body text not null,
+  created_at timestamptz not null default now()
+);
+alter table public.research_notes enable row level security;
+create policy research_notes_select_own on public.research_notes for select using (auth.uid() = user_id);
+create policy research_notes_insert_own on public.research_notes for insert with check (auth.uid() = user_id);
+create policy research_notes_update_own on public.research_notes for update using (auth.uid() = user_id);
+create policy research_notes_delete_own on public.research_notes for delete using (auth.uid() = user_id);
+create index if not exists idx_research_notes_user on public.research_notes(user_id, created_at desc);

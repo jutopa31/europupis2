@@ -8,7 +8,7 @@ const noteColors = [
   'bg-purple-50 border-purple-200 dark:bg-purple-900/20 dark:border-purple-800/30',
 ];
 
-export default function StickyNote({ note, onDelete }) {
+export default function StickyNote({ note, onDelete, deletable = true }) {
   const [isHovered, setIsHovered] = useState(false);
 
   const colorIndex = note.id ? note.id.split('').reduce((acc, char) => acc + char.charCodeAt(0), 0) % noteColors.length : 0;
@@ -29,17 +29,19 @@ export default function StickyNote({ note, onDelete }) {
             {note.title}
           </h3>
         )}
-        <button
-          onClick={() => onDelete?.(note.id)}
-          aria-label="Delete note"
-          className={`flex-shrink-0 w-6 h-6 rounded-full flex items-center justify-center text-xs font-semibold transition-all duration-200 ${
-            isHovered
-              ? 'bg-red-100 text-red-600 dark:bg-red-900/50 dark:text-red-400 scale-110'
-              : 'text-zinc-400 hover:text-zinc-600 dark:hover:text-zinc-300'
-          }`}
-        >
-          ✕
-        </button>
+        {deletable && (
+          <button
+            onClick={() => onDelete?.(note.id)}
+            aria-label="Eliminar nota"
+            className={`flex-shrink-0 w-6 h-6 rounded-full flex items-center justify-center text-xs font-semibold transition-all duration-200 ${
+              isHovered
+                ? 'bg-red-100 text-red-600 dark:bg-red-900/50 dark:text-red-400 scale-110'
+                : 'text-zinc-400 hover:text-zinc-600 dark:hover:text-zinc-300'
+            }`}
+          >
+            ✕
+          </button>
+        )}
       </div>
 
       {note.body && (
@@ -57,4 +59,3 @@ export default function StickyNote({ note, onDelete }) {
     </div>
   );
 }
-

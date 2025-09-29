@@ -1,15 +1,15 @@
 'use client';
 import { useEffect, useMemo } from 'react';
 import useLocalStorage from '../lib/hooks/useLocalStorage';
-import { citiesMock } from '../lib/mocks/citiesMock';
 import CityCard from './CityCard';
 import Input from './ui/Input';
 import { listCities, createCityNote, createCity, deleteCity } from '../lib/services/citiesService';
 import ItinerarySummary from './ItinerarySummary';
 
-export default function CityList() {
-  const initial = useMemo(() => citiesMock, []);
-  const [cities, setCities] = useLocalStorage('europupis-cities', initial);
+export default function CityList({ showAddCity = true }) {
+  // Migramos el almacenamiento local para eliminar mocks por defecto
+  const initial = useMemo(() => [], []);
+  const [cities, setCities] = useLocalStorage('europupis-cities-v2', initial);
 
   useEffect(() => {
     loadCities();
@@ -56,9 +56,16 @@ export default function CityList() {
       const res = await createCity({ name, origin, arrivalDateTime: arrival || null });
       if (res?.ok) {
         const fresh = await listCities();
-        if (Array.isArray(fresh) && fresh.length) setCities(fresh);
+        if (Array.isArray(fresh)) setCities(fresh);
+      } else {
+        // Revertir el optimismo si no se pudo persistir (p. ej., sin sesión)
+        setCities(curr => curr.filter(c => c.id !== temp.id));
+        alert('No se pudo guardar la ciudad. Inicia sesión para guardar en Supabase.');
       }
-    } catch {}
+    } catch {
+      setCities(curr => curr.filter(c => c.id !== temp.id));
+      alert('Ocurrió un problema al guardar la ciudad. Verifica tu conexión/sesión.');
+    }
 
     form.reset();
   }
@@ -79,6 +86,7 @@ export default function CityList() {
   return (
     <div className="space-y-6">
       {/* Añadir ciudad */}
+      {showAddCity && (
       <form onSubmit={addCity} className="card-interactive">
         <div className="flex items-center gap-3 mb-4">
           <div className="w-10 h-10 rounded-lg bg-gradient-to-br from-blue-400 to-indigo-400 flex items-center justify-center text-white font-bold">🏙️</div>
@@ -93,6 +101,7 @@ export default function CityList() {
           <button type="submit" className="btn-primary text-sm px-4 py-2">Agregar</button>
         </div>
       </form>
+      )}
 
       <ItinerarySummary cities={cities} />
       <div className="grid gap-4 sm:grid-cols-2">
