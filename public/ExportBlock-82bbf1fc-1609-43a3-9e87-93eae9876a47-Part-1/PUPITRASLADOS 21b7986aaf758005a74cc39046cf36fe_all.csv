@@ -1,0 +1,22 @@
+﻿LOCALIDAD,CHECK IN,CHECK OUT,DESTINO,DURACIÓN,ESTADO,FECHA,LINK,MEDIO,ORIGEN,OTROS,PRECIO
+MADRID,2pm,11am,https://maps.app.goo.gl/TUENUxu3yRFEBVMNA (DE OVIEDO 4),50min,,"October 2, 2025","https://moovitapp.com/tripplan/madrid-21/poi/Calle%20De%20Oviedo%204,%20Madrid/Aeropuerto%20De%20Barajas%20-%20T1,%20Madrid,%20Madrid/es?customerId=4908&ref=5&af_sub8=%2Findex%2Fes%2Ftransporte_p%25C3%25BAblico-Madrid-21%3Futm_source%3Dchatgpt.com&af_sub9=Search+bar+button&poiType=Metro&fll=40.463119_-3.57214&tll=40.448947_-3.699938&metroSeoName=Madrid&t=1",METRO,https://maps.app.goo.gl/cxkXirc9v7AiS6vW8,,€5.00
+MADRID,,,TOLEDO,1hs,,"October 3, 2025",https://maps.app.goo.gl/Py1Uko2YRtkYZjgM7,"METRO, TREN",AIRBNB MADRID,,€15.00
+"
+TOLEDO",3pm,11 am,AIRBNB TOLEDO (CALLE ARRINCONADA SAN JUSTO 1),15m,,"October 3, 2025",,"CAMINAR, TAXI",ESTACION DE TREN,,
+TOLEDO,,,BARCELON,3 30hs,PENDIENTE,"October 4, 2025",https://maps.app.goo.gl/Fmej8L5juBmT2pWt8,TREN,ESTACIÓN DE TREN TOLEDO,,€35.00
+BARCELONA,16 PM,12 PM,"AIRBNB BARCELONA   (Carrer de Sants, 387, Sants-Montjuïc)",10M,,"October 4, 2025",https://maps.app.goo.gl/HWv49TotANiebgfn9,CAMINAR,ESTACIÓN DE TREN BARCELONA,,
+BARCELONA,,,PARIS,6 30 hs,"PAGADO, RESERVADO","October 6, 2025",https://www.sncf-connect.com/es-es/home/shop/results/outward,TREN,AIRBNB BARCELONA,,€80.00
+PARIS,5PM,12PM,"AIRBNB PARIS (18 Rue Clairaut,)",20m,,"October 6, 2025",https://maps.app.goo.gl/5uhnYbbmkNvTrGq49,METRO,PARIS GARD DE LYON,,
+BRUJAS,,,AIRBNB BRUJAS (Noorweegse kaai 8 bus 0201),20/10M,,"October 10, 2025",6 - 4 -42,"BONDI, CAMINAR",BRUJAS,,
+BRUJAS,,,GENT,1H,PENDIENTE,"October 11, 2025",https://maps.app.goo.gl/kiXfPG78HCXmvQ2XA,"BONDI, TREN",AIRBNB BRUJAS (Noorweegse kaai 8 bus 0201),,
+PARIS,,,MONT SAINT MICHEL,,PENDIENTE,"October 9, 2025",,,"AIRBNB PARIS (18 Rue Clairaut,)",,
+MONT SAINT MICHEL,3PM,10 AM,BRUJAS,7H,PENDIENTE,"October 10, 2025",https://maps.app.goo.gl/QYVz66SRoGDNnwjW9    https://maps.app.goo.gl/MRKNd5NqARXKBHqC7,"BONDI, CAMINAR, TREN",MONT SAINT MICHEL,,
+GENT,3PM,11 AM,"AIRBNB GENT (Gent, Vlaams Gewest 9000)",20M,,"October 11, 2025",https://maps.app.goo.gl/4nBMdREvs4N18U1p7,TRANVÍA,GENT SINT PIERS,,
+GENT,,,AMSTERDAM,2 40 H,,"October 12, 2025",https://maps.app.goo.gl/gTTCVccPRvCdnD9x7,"TRANVÍA, TREN","AIRBNB GENT (Gent, Vlaams Gewest 9000)",,
+AMSTERDAM,,,AIRBNB AMSTERDAM ( Zandpad 5),20m,,"October 12, 2025",https://maps.app.goo.gl/58JKUQLtm2GdFb526,TRANVÍA,AMSTERDAM,,
+AMSTERDAM,,,LONDRES,5 h,"PAGADO, RESERVADO","October 14, 2025",https://maps.app.goo.gl/e1FDbktgmGmp24Fx8,TREN,AMSTERDAM,,€100.00
+LONDRES,4 PM,11 AM,AIRBNB LONDRES ( 659 Lordship Lane),25m,,"October 14, 2025",https://maps.app.goo.gl/SYXzYSHE6XjfSnwQ8,METRO,LONDRES,,
+LONDRES,,,EDIMBURGO,4 20 H,PENDIENTE,"October 18, 2025",https://maps.app.goo.gl/eUAcVkzZVC3sn9w86,TREN,LONDRES KING CROSS,,
+EDIMBURGO,,,"AIRBNB EDIMBURGO (Cramond, Scotland EH4 6PJ)",30 m,,"October 18, 2025",47 -37,BONDI,"EDIMBURGO ",,
+EDIMBURGO,,,AEROPUERTO EDIMBURGO," 35 m",,"June 21, 2025",https://maps.app.goo.gl/fFBLtcwD5VjbxtuA8,"BONDI, TRANVÍA","AIRBNB EDIMBURGO (Cramond, Scotland EH4 6PJ)",,
+MADRID,,,AIRBNB MADRID https://maps.app.goo.gl/gdyDvGMAt7qj66nC8,2 45 h,PENDIENTE,"June 21, 2025",,AVIÓN,BARAJAS MADRID,,

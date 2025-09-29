@@ -5,7 +5,8 @@
   "scripts": {
     "dev": "next dev",
     "build": "next build",
-    "start": "next start"
+    "start": "next start",
+    "convert:traslados": "python3 scripts/convert_transfers.py"
   },
   "dependencies": {
     "@supabase/supabase-js": "^2.58.0",

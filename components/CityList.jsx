@@ -3,7 +3,7 @@ import { useEffect, useMemo } from 'react';
 import useLocalStorage from '../lib/hooks/useLocalStorage';
 import CityCard from './CityCard';
 import Input from './ui/Input';
-import { listCities, createCityNote, createCity, deleteCity } from '../lib/services/citiesService';
+import { listCities, createCityNote, createCity, deleteCity, updateCityBasicInfo } from '../lib/services/citiesService';
 import ItinerarySummary from './ItinerarySummary';
 
 export default function CityList({ showAddCity = true }) {
@@ -74,10 +74,39 @@ export default function CityList({ showAddCity = true }) {
     loadCities();
   }
 
+  async function handleUpdateArrival(cityId, arrivalValue) {
+    // Optimista: actualizar en memoria/localStorage
+    setCities(cities.map(c => c.id === cityId ? { ...c, arrivalDateTime: arrivalValue } : c));
+    // Intentar persistir (si hay Supabase + sesión)
+    try {
+      const res = await updateCityBasicInfo(cityId, { arrivalDateTime: arrivalValue });
+      if (!res?.ok) {
+        // Si no se pudo persistir, mantén el valor local pero informa
+        // y refresca desde el servicio por si hay desajustes
+        loadCities();
+      }
+    } catch {
+      loadCities();
+    }
+  }
+
   async function handleDeleteCity(id) {
     setCities(cities.filter(c => c.id !== id));
     try {
       await deleteCity(id);
+    } catch {
+      loadCities();
+    }
+  }
+
+  async function handleRenameCity(cityId, name) {
+    const trimmed = (name || '').trim();
+    if (!trimmed) return;
+    // Optimista en local
+    setCities(cities.map(c => c.id === cityId ? { ...c, name: trimmed } : c));
+    try {
+      const res = await updateCityBasicInfo(cityId, { name: trimmed });
+      if (!res?.ok) loadCities();
     } catch {
       loadCities();
     }
@@ -103,10 +132,17 @@ export default function CityList({ showAddCity = true }) {
       </form>
       )}
 
-      <ItinerarySummary cities={cities} />
+      <ItinerarySummary cities={cities} onUpdateArrival={handleUpdateArrival} />
       <div className="grid gap-4 sm:grid-cols-2">
         {cities.map(c => (
-          <CityCard key={c.id} city={c} onAddNote={addNote} onUpdateCity={handleUpdateCity} onDeleteCity={handleDeleteCity} />
+          <CityCard
+            key={c.id}
+            city={c}
+            onAddNote={addNote}
+            onUpdateCity={handleUpdateCity}
+            onDeleteCity={handleDeleteCity}
+            onRenameCity={handleRenameCity}
+          />
         ))}
       </div>
     </div>

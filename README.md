@@ -20,6 +20,8 @@ Aplicación Next.js mínima para planificar un viaje por Europa. La interfaz est
 - `/tasks` — Notas adhesivas (mock + localStorage)
 - `/expenses` — Registro de gastos (mock + localStorage)
 - `/cities` — Ciudades y traslados (Supabase + localStorage fallback)
+  - En “Resumen de itinerario”, haz clic en “Llegada” para editar la fecha y hora en línea.
+  - En cada tarjeta de ciudad, usa el icono ✏️ para renombrar la ciudad.
 - `/pantu-investiga` — Notas de investigación por ciudad (usa los datos de Ciudades)
 
 Configura la fecha objetivo en `lib/tripConfig.js`.

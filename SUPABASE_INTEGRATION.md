@@ -68,3 +68,21 @@ values (auth.uid(), 'Ideas sueltas y pendientes de investigar');
 ## Próximos pasos
 - Migrar `tasks` y `expenses` a Supabase con el mismo patrón.
 - Añadir login UI sencillo (email/GitHub) si lo deseas.
+
+## Importar traslados desde CSV
+- Origen: `public/ExportBlock-*/PUPITRASLADOS *.csv` (archivo exportado).
+- Conversión: ejecuta `python3 scripts/convert_transfers.py` o `npm run convert:traslados`.
+- Se generan tres archivos en `db/import/`:
+  - `cities_import.csv` → tabla `public.cities` (columnas: `id,user_id,name`).
+  - `city_transfers_import.csv` → tabla `public.city_transfers` (`id,user_id,city_id,info`).
+  - `expenses_import.csv` (opcional) → tabla `public.expenses` (`id,user_id,date,description,amount,category,paid_by`).
+
+Importación en Supabase (orden recomendado):
+- 1) Sustituye `REPLACE_WITH_USER_ID` por tu UUID (Auth → Users → copia el `id`).
+- 2) Table Editor → `cities` → Import data → selecciona `db/import/cities_import.csv` y mapea columnas.
+- 3) Table Editor → `city_transfers` → Import data → selecciona `db/import/city_transfers_import.csv`.
+- 4) (Opcional) Table Editor → `expenses` → Import data → selecciona `db/import/expenses_import.csv`.
+
+Notas:
+- Los `id` de ciudades se generan de forma determinista para poder referenciarlos en `city_transfers` al importar.
+- El script sanea precios (formato `€12.34`) y fechas (`October 2, 2025` → `2025-10-02`).

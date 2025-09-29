@@ -33,13 +33,15 @@ function formatDateTimeEs(value) {
   }
 }
 
-export default function CityCard({ city, onAddNote, onUpdateCity, onDeleteCity }) {
+export default function CityCard({ city, onAddNote, onUpdateCity, onDeleteCity, onRenameCity }) {
   const [showAddNote, setShowAddNote] = useState(false);
   const [noteValue, setNoteValue] = useState('');
   const [showAddTransfer, setShowAddTransfer] = useState(false);
   const [showAddAccommodation, setShowAddAccommodation] = useState(false);
   const [editingTransfer, setEditingTransfer] = useState(null);
   const [editingAccommodation, setEditingAccommodation] = useState(null);
+  const [editingName, setEditingName] = useState(false);
+  const [nameDraft, setNameDraft] = useState(city.name || '');
 
   function handleSubmit(e) {
     e.preventDefault();
@@ -137,7 +139,49 @@ export default function CityCard({ city, onAddNote, onUpdateCity, onDeleteCity }
           {cityEmoji}
         </div>
         <div>
-          <h3 className="text-xl font-bold text-zinc-900 dark:text-zinc-100">{city.name}</h3>
+          <div className="flex items-center gap-2">
+            {editingName ? (
+              <div className="flex items-center gap-2">
+                <Input
+                  value={nameDraft}
+                  onChange={(e) => setNameDraft(e.target.value)}
+                  onKeyDown={(e) => {
+                    if (e.key === 'Enter') {
+                      onRenameCity?.(city.id, nameDraft);
+                      setEditingName(false);
+                    }
+                    if (e.key === 'Escape') {
+                      setEditingName(false);
+                      setNameDraft(city.name || '');
+                    }
+                  }}
+                  onBlur={() => {
+                    onRenameCity?.(city.id, nameDraft);
+                    setEditingName(false);
+                  }}
+                  aria-label={`Editar nombre de ${city.name}`}
+                  size="sm"
+                  className="text-base font-bold max-w-[220px]"
+                />
+                <button
+                  type="button"
+                  className="btn-secondary text-xs px-2 py-1"
+                  onMouseDown={(e) => e.preventDefault()}
+                  onClick={() => { onRenameCity?.(city.id, nameDraft); setEditingName(false); }}
+                >Guardar</button>
+              </div>
+            ) : (
+              <>
+                <h3 className="text-xl font-bold text-zinc-900 dark:text-zinc-100">{city.name}</h3>
+                <button
+                  type="button"
+                  className="text-xs text-blue-600 dark:text-blue-400 hover:text-blue-700 dark:hover:text-blue-300"
+                  aria-label="Editar nombre de la ciudad"
+                  onClick={() => setEditingName(true)}
+                >✏️</button>
+              </>
+            )}
+          </div>
           {city.arrivalDateTime && (
             <p className="text-sm muted">Llegada: {formatDateTimeEs(city.arrivalDateTime)}{city.from ? ` · desde ${city.from}` : ''}</p>
           )}

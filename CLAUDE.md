@@ -29,7 +29,7 @@ npm start
 - **Styling**: Tailwind v4 via `@import "tailwindcss"` in globals.css + PostCSS + Autoprefixer
 - **State Management**: React hooks (useState, useEffect) + custom useLocalStorage hook
 - **Data Layer**: Hybrid services (`lib/services/`) - Supabase when configured + env vars present, falls back to mock + localStorage
-- **Routing**: App Router with pages: `/` (countdown), `/tasks`, `/expenses`, `/cities`
+- **Routing**: App Router with pages: `/` (countdown), `/tasks`, `/expenses`, `/cities`, `/pantu-investiga`
 
 ## Key Config
 
@@ -41,18 +41,22 @@ npm start
 
 ```
 app/
-  layout.js         # Shell + global styles
-  page.js           # Home (countdown)
-  tasks/page.js     # Notas adhesivas
-  expenses/page.js  # Registro de gastos
-  cities/page.js    # Ciudades y ubicaciones
+  layout.js              # Shell + global styles
+  page.js                # Home (countdown)
+  tasks/page.js          # Notas adhesivas
+  expenses/page.js       # Registro de gastos
+  cities/page.js         # Ciudades y ubicaciones
+  pantu-investiga/page.js # Tablero de investigación con notas libres
 components/
-  ui/               # Botones, inputs, etc.
+  ui/                    # Botones, inputs, etc.
+  ResearchBoard.jsx      # Tablero de notas de investigación
+  StickyNote.jsx         # Componente de nota adhesiva
 lib/
   tripConfig.js
   hooks/
   mocks/
   services/
+    researchService.js   # Servicio para notas de investigación
 ```
 
 ## Important Development Notes
@@ -62,6 +66,7 @@ lib/
 - **Service Layer**: All data operations go through `lib/services/` - hybrid approach with Supabase + fallback
 - **Mock Data**: Lives in `lib/mocks/` and persists via localStorage using `useLocalStorage` hook
 - **Supabase Integration**: Cities service already integrated; auto-detects env vars and user auth
-- **Theme**: Custom CSS variables in globals.css for brand colors and dark mode support
+- **Theme**: Mediterranean color scheme with blue brand colors and terracotta/amber accents in globals.css
+- **Design**: Enhanced backgrounds with subtle gradients and decorative elements (cat image in Pantu Investiga)
 - **Keep minimal**: Prefer editing existing files over creating new ones
 

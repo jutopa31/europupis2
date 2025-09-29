@@ -1,0 +1,6 @@
+id,user_id,date,description,amount,category,paid_by
+323577fa-5a5b-40c1-a4b4-3b3af6ced424,5942a276-3f56-4b95-870b-1542aa45c9a4,2025-10-02,Traslado: https://maps.app.goo.gl/cxkXirc9v7AiS6vW8 → https://maps.app.goo.gl/TUENUxu3yRFEBVMNA (DE OVIEDO 4) (METRO),5.00,Traslado,
+f224c3b2-aab7-4e8a-b44b-d797a148d50c,5942a276-3f56-4b95-870b-1542aa45c9a4,2025-10-03,"Traslado: AIRBNB MADRID → TOLEDO (METRO, TREN)",15.00,Traslado,
+3de0f68a-9515-4c3c-9e25-fc72a0ca53d1,5942a276-3f56-4b95-870b-1542aa45c9a4,2025-10-04,Traslado: ESTACIÓN DE TREN TOLEDO → BARCELON (TREN),35.00,Traslado,
+e59b0f68-ec29-4e43-aad5-520ab35eae49,5942a276-3f56-4b95-870b-1542aa45c9a4,2025-10-06,Traslado: AIRBNB BARCELONA → PARIS (TREN),80.00,Traslado,
+23bf41e8-ae99-4322-aa94-efb4f4c27e32,5942a276-3f56-4b95-870b-1542aa45c9a4,2025-10-14,Traslado: AMSTERDAM → LONDRES (TREN),100.00,Traslado,
