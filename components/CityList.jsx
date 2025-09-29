@@ -17,7 +17,7 @@ export default function CityList() {
 
   async function loadCities() {
     const data = await listCities();
-    if (Array.isArray(data) && data.length) {
+    if (Array.isArray(data)) {
       setCities(data);
     }
   }
